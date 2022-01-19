@@ -30,6 +30,7 @@ def main():
                                   'error': 'Bad request'})
             continue
         msg = process_client_message(message_from_client)
+        client.close()
         send_message(client, msg)
         client.close()
 

@@ -28,7 +28,7 @@ def main():
     try:
         transport.connect((server_adress, server_port))
     except ConnectionRefusedError:
-        return print('Неверные параметры подключения')
+        return print('Неудалось подключиться')
     msg = preparation_message()
     send_message(transport, msg)
     answer_by_server = get_message(transport)
