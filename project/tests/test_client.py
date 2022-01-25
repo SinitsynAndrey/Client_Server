@@ -35,13 +35,17 @@ class TestClassClient(unittest.TestCase):
 
     def test_processing_answer_200(self):
         """ Тест корректной обработки ответа с кодом 200"""
-        self.assertEqual(processing_answer({'response': 200}),
-                         'Соединение установлено')
+        with self.assertLogs() as captured:
+            processing_answer({'response': 200})
+        self.assertEqual(captured.records[0].getMessage(),
+                         'Соединение с сервером установлено.')
 
     def test_processing_answer_400(self):
         """ Тест корректной обработки ответа с кодом 400"""
-        self.assertEqual(processing_answer({'response': 400, 'error': 'Bad request'}),
-                         'Connection error')
+        with self.assertLogs() as captured:
+            processing_answer({'response': 400})
+        self.assertEqual(captured.records[0].getMessage(),
+                         'Не удалось подключиться к серверу. Ошибка 400')
 
 
 if __name__ == '__main__':

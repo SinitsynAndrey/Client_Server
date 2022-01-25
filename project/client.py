@@ -7,6 +7,7 @@ from utils import get_params, get_message, send_message
 
 logger = logging.getLogger('client')
 
+
 def preparation_message(account_name='guest'):
     message = {
         'action': 'presence',
@@ -25,11 +26,10 @@ def processing_answer(answer):
     return logger.error(f'Не удалось подключиться к серверу. Ошибка {answer["response"]}')
 
 
-
 def main():
     server_address, server_port = get_params()
     if not server_address:
-        server_address = DEFAULT_SERVER_ADRESS
+        server_address = DEFAULT_SERVER_ADDRESS
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         transport.connect((server_address, server_port))

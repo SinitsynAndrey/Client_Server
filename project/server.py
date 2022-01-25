@@ -22,9 +22,9 @@ def process_client_message(message):
 
 
 def main():
-    client_adress, client_port = get_params()
+    client_address, client_port = get_params()
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    transport.bind((client_adress, client_port))
+    transport.bind((client_address, client_port))
     transport.listen(REQUEST_NUMBER)
 
     while True:

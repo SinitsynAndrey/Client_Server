@@ -2,10 +2,14 @@ import json
 import sys
 import re
 from constants import *
+import traceback
+from logs.decos import log
+import logs.config_server_log
 
 
+@log
 def get_message(client):
-    encode_response = client.recv(MAX_PACKAGES_LENGHT)
+    encode_response = client.recv(MAX_PACKAGES_LENGTH)
     if isinstance(encode_response, bytes):
         decode_response = encode_response.decode(ENCODING)
         response = json.loads(decode_response)
@@ -17,12 +21,14 @@ def get_message(client):
         raise ValueError
 
 
+@log
 def send_message(client, msg):
     json_response = json.dumps(msg)
     encode_response = json_response.encode(ENCODING)
     client.send(encode_response)
 
 
+@log
 def get_params():
     if '-p' in sys.argv:
         if len(sys.argv) > sys.argv.index('-p') + 1 \
