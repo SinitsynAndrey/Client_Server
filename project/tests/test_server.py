@@ -1,64 +1,54 @@
 import sys
 import os
 import unittest
+from unittest.mock import patch
 
 sys.path.append(os.path.join(os.getcwd(), '..'))
-from project.server import process_client_message
+from project.server import get_params
 
 
 class TestClassServer(unittest.TestCase):
     """Тестирование модуля server.py"""
 
-    error_answer = {'response': 400,
-                    'error': 'Bad request'}
-    ok_answer = {'response': 200}
+    @patch.object(sys, 'argv', ['server.py', '-p', '8888', '-a', '127.0.0.1'])
+    def test_get_params_with_all_params(self):
+        """Тестирование функции get_params с корректно заданными
+        параметрами адреса, порта и мода"""
+        self.assertEqual(get_params(), ('127.0.0.1', 8888))
 
-    def test_process_client_message(self):
-        """Тест обработка корректного запроса от клиента"""
-        self.assertEqual(process_client_message({
-            'action': 'presence',
-            'time': 111,
-            'user': {'account_name': 'guest'}
-            }), self.ok_answer)
+    @patch.object(sys, 'argv', ['server.py', '-p', '8888'])
+    def test_get_params_with_port_in_params(self):
+        """Тестирование функции get_params.
+         с корректно заданным
+        портом и модом и адресом по умолчанию"""
+        self.assertEqual(get_params(), ('', 8888))
 
-    def test_process_client_message_without_action(self):
-        """Тест обработка запроса от клиента без поля action"""
-        self.assertEqual(process_client_message({
-            'time': 111,
-            'user': {'account_name': 'guest'}
-            }), self.error_answer)
+    @patch.object(sys, 'argv', ['server.py', '-a', '127.0.0.1'])
+    def test_get_params_with_address_in_params(self):
+        """Тестирование функции get_params с корректно заданным
+        адресом и портом по умолчанию"""
+        self.assertEqual(get_params(), ('127.0.0.1', 7777))
 
-    def test_process_client_message_without_time(self):
-        """Тест обработка запроса от клиента без поля time"""
-        self.assertEqual(process_client_message({
-            'action': 'presence',
-            'user': {'account_name': 'guest'}
-            }), self.error_answer)
+    @patch.object(sys, 'argv', ['client.py', '-p', '66666'])
+    def test_get_params_with_port_more_65535_in_params(self):
+        """Тестирование функции get_params с не корректно заданным портом"""
+        self.assertRaises(SystemExit, get_params)
 
+    @patch.object(sys, 'argv', ['client.py', '-p', '1000'])
+    def test_get_params_with_port_less_1024_in_params(self):
+        """Тестирование функции get_params с не корректно заданным портом"""
+        self.assertRaises(SystemExit, get_params)
 
-    def test_process_client_message_without_user(self):
-        """Тест обработка запроса от клиента без поля user"""
-        self.assertEqual(process_client_message({
-            'action': 'presence',
-            'time': 111,
-            }), self.error_answer)
+    @patch.object(sys, 'argv', ['client.py', '-p'])
+    def test_get_params_with_not_set_port_in_params(self):
+        """Тестирование функции get_params с не корректно заданным портом"""
+        self.assertRaises(AttributeError, get_params)
 
-    def test_process_client_message_with_wrong_action(self):
-        """Тест обработка запроса от клиента c неверным action"""
-        self.assertEqual(process_client_message({
-            'action': 'msg',
-            'time': 111,
-            'user': {'account_name': 'user'}
-            }), self.error_answer)
+    @patch.object(sys, 'argv', ['client.py', '-a', '127001'])
+    def test_get_params_with_incorrect_address_in_params(self):
+        """Тестирование функции get_params с не корректно заданным адресом"""
+        self.assertRaises(SystemExit, get_params)
 
-
-    def test_process_client_message_with_wrong_user(self):
-        """Тест обработка запроса от клиента c неверным user"""
-        self.assertEqual(process_client_message({
-            'action': 'presence',
-            'time': 111,
-            'user': {'account_name': 'user'}
-            }), self.error_answer)
 
 if __name__ == '__main__':
     unittest.main()

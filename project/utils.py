@@ -1,11 +1,21 @@
 import json
 import sys
 import re
+import argparse
 from constants import *
 import traceback
-from logs.decos import log
+import logging
 import logs.config_server_log
+import logs.config_client_log
+from logs.decos import log
 
+
+TRACE = traceback.format_stack()
+
+if 'client' in TRACE[0]:
+    logger = logging.getLogger('client')
+else:
+    logger = logging.getLogger('server')
 
 @log
 def get_message(client):
@@ -23,31 +33,15 @@ def get_message(client):
 
 @log
 def send_message(client, msg):
-    json_response = json.dumps(msg)
+    """Отправка сообщения."""
+    try:
+        json_response = json.dumps(msg)
+    except json.JSONDecodeError:
+        logger.critical(f'Сообщение: {msg} не удалось'
+                        f' преобразовать в JSON строку')
     encode_response = json_response.encode(ENCODING)
     client.send(encode_response)
 
 
-@log
-def get_params():
-    if '-p' in sys.argv:
-        if len(sys.argv) > sys.argv.index('-p') + 1 \
-                and sys.argv[sys.argv.index('-p') + 1].isdigit() \
-                and 1024 < int(sys.argv[sys.argv.index('-p') + 1]) < 65535:
-            port = int(sys.argv[sys.argv.index('-p') + 1])
-        else:
-            print('Неверно задан порт')
-            sys.exit(1)
-    else:
-        port = DEFAULT_PORT
-
-    if '-a' in sys.argv:
-        if len(sys.argv) > sys.argv.index('-a') + 1 \
-                and re.fullmatch(r'\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}', sys.argv[sys.argv.index('-a') + 1]):
-            adress = sys.argv[sys.argv.index('-a') + 1]
-        else:
-            print('Неверно задан адрес')
-            sys.exit(1)
-    else:
-        adress = ''
-    return adress, port
+if __name__ == '__main__':
+    print(get_params())

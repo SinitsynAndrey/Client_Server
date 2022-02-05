@@ -2,7 +2,7 @@
 
 import traceback
 import logging
-from typing import List
+
 
 TRACE = traceback.format_stack()
 
