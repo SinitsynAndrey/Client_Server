@@ -1,0 +1,1 @@
+2022-02-08 19:13:51,452 DEBUG    decos.py  Вызвана функция get_message c аргументами (<socket.socket fd=444, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 63634)>,), {} из модуля project.utils. Вызов из функции JB_DISABLE_BUFFERING))

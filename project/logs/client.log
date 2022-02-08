@@ -1,0 +1,69 @@
+2022-02-08 19:02:35,167 DEBUG    client.py Получен ответ от сервера: {'response': 200}
+2022-02-08 19:02:35,170 DEBUG    client.py Получен ответ от сервера: {'response': 400}
+2022-02-08 19:02:35,237 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:02:35,238 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:02:35,239 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:02:35,240 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:05:55,901 DEBUG    client.py Получен ответ от сервера: {'response': 200}
+2022-02-08 19:05:55,911 DEBUG    client.py Получен ответ от сервера: {'response': 400}
+2022-02-08 19:05:55,919 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:05:55,921 DEBUG    client.py Получен ответ от сервера: {'answer', 400}
+2022-02-08 19:05:55,922 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:05:55,925 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:06:38,833 DEBUG    client.py Получен ответ от сервера: {'response': 200}
+2022-02-08 19:06:38,835 DEBUG    client.py Получен ответ от сервера: {'response': 400}
+2022-02-08 19:06:38,837 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:06:38,838 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:06:38,838 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:06:38,855 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:08:46,841 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:08:46,849 DEBUG    client.py Получен ответ от сервера: {'response': 200}
+2022-02-08 19:08:46,855 DEBUG    client.py Получен ответ от сервера: {'response': 400}
+2022-02-08 19:08:46,858 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:08:46,859 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:08:46,859 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:08:46,861 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:10:01,336 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:10:01,341 DEBUG    client.py Получен ответ от сервера: {'response': 200}
+2022-02-08 19:10:01,347 DEBUG    client.py Получен ответ от сервера: {'response': 400, 'error': 'dfe'}
+2022-02-08 19:10:01,347 CRITICAL client.py dfe
+2022-02-08 19:10:01,348 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:10:01,349 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:10:01,350 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:10:01,354 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:10:39,448 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:10:39,457 DEBUG    client.py Получен ответ от сервера: {'response': 200, 'alert': 'dscs'}
+2022-02-08 19:10:39,458 INFO     client.py dscs
+2022-02-08 19:10:39,503 DEBUG    client.py Получен ответ от сервера: {'response': 400, 'error': 'dfe'}
+2022-02-08 19:10:39,503 CRITICAL client.py dfe
+2022-02-08 19:10:39,510 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:10:39,510 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:10:39,510 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:10:39,523 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:11:27,216 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:11:27,228 DEBUG    client.py Получен ответ от сервера: {'response': 200, 'alert': 'dscs'}
+2022-02-08 19:11:27,229 INFO     client.py dscs
+2022-02-08 19:11:27,233 DEBUG    client.py Получен ответ от сервера: {'response': 400, 'error': 'dfe'}
+2022-02-08 19:11:27,233 CRITICAL client.py dfe
+2022-02-08 19:11:27,234 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:11:27,235 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:11:27,235 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:11:27,239 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:11:49,336 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:11:49,343 DEBUG    client.py Получен ответ от сервера: {'response': 200, 'alert': 'dscs'}
+2022-02-08 19:11:49,343 INFO     client.py dscs
+2022-02-08 19:11:49,356 DEBUG    client.py Получен ответ от сервера: {'response': 400, 'error': 'dfe'}
+2022-02-08 19:11:49,357 CRITICAL client.py dfe
+2022-02-08 19:11:49,359 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:11:49,359 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:11:49,359 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:11:49,363 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:13:34,130 DEBUG    client.py Сформировано presence сообщение
+2022-02-08 19:13:34,133 DEBUG    client.py Получен ответ от сервера: {'response': 200, 'alert': 'dscs'}
+2022-02-08 19:13:34,137 INFO     client.py dscs
+2022-02-08 19:13:34,141 DEBUG    client.py Получен ответ от сервера: {'response': 400, 'error': 'dfe'}
+2022-02-08 19:13:34,142 CRITICAL client.py dfe
+2022-02-08 19:13:34,142 DEBUG    client.py Получен ответ от сервера: ['response', 400]
+2022-02-08 19:13:34,142 DEBUG    client.py Получен ответ от сервера: {400, 'answer'}
+2022-02-08 19:13:34,146 CRITICAL client.py Неверный ответ сервера
+2022-02-08 19:13:34,146 DEBUG    client.py Сформировано presence сообщение
