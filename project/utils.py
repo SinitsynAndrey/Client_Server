@@ -19,6 +19,7 @@ else:
 
 @log
 def get_message(client):
+
     encode_response = client.recv(MAX_PACKAGES_LENGTH)
     if isinstance(encode_response, bytes):
         decode_response = encode_response.decode(ENCODING)

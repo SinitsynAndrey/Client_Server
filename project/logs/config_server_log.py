@@ -7,6 +7,7 @@ logger = logging.getLogger('server')
 
 
 formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(filename)s %(message)s')
+formatter_stdout = logging.Formatter('%(message)s')
 
 path = os.path.dirname(os.path.abspath(__file__))
 path = os.path.join(path, 'server.log')
@@ -17,7 +18,7 @@ fh.setFormatter(formatter)
 
 sh = logging.StreamHandler(sys.stdout)
 sh.setLevel(logging.INFO)
-sh.setFormatter(formatter)
+sh.setFormatter(formatter_stdout)
 
 logger.addHandler(fh)
 logger.addHandler(sh)

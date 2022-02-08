@@ -3,9 +3,9 @@ from subprocess import Popen, CREATE_NEW_CONSOLE
 
 Popen('python server.py', creationflags=CREATE_NEW_CONSOLE)
 
-for _ in range(2):
-    Popen('python client.py -m send', creationflags=CREATE_NEW_CONSOLE)
-    Popen('python client.py -m listen', creationflags=CREATE_NEW_CONSOLE)
+for i in range(4):
+    Popen(f'python client.py -n test_{i}', creationflags=CREATE_NEW_CONSOLE)
+
 
 
 
