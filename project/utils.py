@@ -1,21 +1,13 @@
 import json
 import sys
-import re
-import argparse
-from constants import *
-import traceback
 import logging
-import logs.config_server_log
-import logs.config_client_log
+from constants import *
 from logs.decos import log
 
-
-TRACE = traceback.format_stack()
-
-if 'client' in TRACE[0]:
-    logger = logging.getLogger('client')
-else:
+if 'server' in sys.argv[0]:
     logger = logging.getLogger('server')
+else:
+    logger = logging.getLogger('client')
 
 @log
 def get_message(client):
@@ -42,7 +34,3 @@ def send_message(client, msg):
                         f' преобразовать в JSON строку')
     encode_response = json_response.encode(ENCODING)
     client.send(encode_response)
-
-
-if __name__ == '__main__':
-    print(get_params())
