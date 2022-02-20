@@ -5,7 +5,3 @@ Popen('python server.py', creationflags=CREATE_NEW_CONSOLE)
 
 for i in range(4):
     Popen(f'python client.py -n test_{i}', creationflags=CREATE_NEW_CONSOLE)
-
-
-
-

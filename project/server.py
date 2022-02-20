@@ -7,6 +7,7 @@ import argparse
 import re
 import sys
 from descriptors import ServerPort
+from server_database import ServerDB
 
 from constants import (REQUEST_NUMBER, ACTION, TIME, USER, ACCOUNT_NAME,
                        FROM, PRESENCE, RESPONSE, ERROR, MESSAGE, MESSAGE_TEXT,
@@ -21,6 +22,7 @@ logger = logging.getLogger('server')
 class Server(metaclass=ServerValidator):
 
     port = ServerPort()
+    db = ServerDB()
 
     def __init__(self):
         self.clients = []
@@ -55,6 +57,8 @@ class Server(metaclass=ServerValidator):
                 self.user_names[message[USER][ACCOUNT_NAME]] = client
                 presence_alert = f'Добро пожаловать в чат, {message[USER][ACCOUNT_NAME]}!\n'
                 send_message(client, {RESPONSE: 200, ALERT: presence_alert})
+                client_ip, client_port = client.getpeername()
+                self.db.client_login(message[USER][ACCOUNT_NAME], client_ip, client_port)
             else:
                 send_message(client, {RESPONSE: 400, ERROR: f'Имя {message[USER][ACCOUNT_NAME]} уже занято'})
         else:
@@ -83,6 +87,7 @@ class Server(metaclass=ServerValidator):
         if FROM in message:
             logger.debug(f'Получено exit сообщение от {client.getpeername()}')
             send_message(client, {ACTION: EXIT})
+            self.db.client_logout(message[FROM])
             self.clients.remove(client)
             client.close()
             del self.user_names[message[FROM]]
