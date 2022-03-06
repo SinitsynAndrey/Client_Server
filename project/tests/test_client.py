@@ -1,4 +1,4 @@
-"""Unit testing client.py"""
+"""Unit testing client_old.py"""
 import sys
 import os
 import unittest
@@ -10,7 +10,7 @@ from project.client import preparation_presence_message, processing_answer, get_
 
 
 class TestClassClient(unittest.TestCase):
-    """Class testing client.py"""
+    """Class testing client_old.py"""
 
     def test_preparation_message(self):
         """Тест корректной подготовки сообщения"""
@@ -57,41 +57,41 @@ class TestClassClient(unittest.TestCase):
         """ Тест корректной обработки ответа с кодом 400"""
         self.assertRaises(TypeError, processing_answer, [RESPONSE, 400])
 
-    @patch.object(sys, 'argv', ['client.py', '-p', '8888', '-a', '127.0.0.1'])
+    @patch.object(sys, 'argv', ['client_old.py', '-p', '8888', '-a', '127.0.0.1'])
     def test_get_params_with_all_params(self):
         """Тестирование функции get_params с корректно заданными
         параметрами адреса, порта и мода"""
         self.assertEqual(get_params(), ('127.0.0.1', 8888, None))
 
-    @patch.object(sys, 'argv', ['client.py', '-p', '8888'])
+    @patch.object(sys, 'argv', ['client_old.py', '-p', '8888'])
     def test_get_params_with_port_in_params(self):
         """Тестирование функции get_params.
          с корректно заданным
         портом и модом и адресом по умолчанию"""
         self.assertEqual(get_params(), ('127.0.0.1', 8888, None))
 
-    @patch.object(sys, 'argv', ['client.py', '-a', '127.0.0.1'])
+    @patch.object(sys, 'argv', ['client_old.py', '-a', '127.0.0.1'])
     def test_get_params_with_address_in_params(self):
         """Тестирование функции get_params с корректно заданным
         адресом и портом по умолчанию"""
         self.assertEqual(get_params(), ('127.0.0.1', 7777, None))
 
-    @patch.object(sys, 'argv', ['client.py', '-p', '66666'])
+    @patch.object(sys, 'argv', ['client_old.py', '-p', '66666'])
     def test_get_params_with_port_more_65535_in_params(self):
         """Тестирование функции get_params с не корректно заданным портом"""
         self.assertRaises(SystemExit, get_params)
 
-    @patch.object(sys, 'argv', ['client.py', '-p', '1000'])
+    @patch.object(sys, 'argv', ['client_old.py', '-p', '1000'])
     def test_get_params_with_port_less_1024_in_params(self):
         """Тестирование функции get_params с не корректно заданным портом"""
         self.assertRaises(SystemExit, get_params)
 
-    @patch.object(sys, 'argv', ['client.py', '-p'])
+    @patch.object(sys, 'argv', ['client_old.py', '-p'])
     def test_get_params_with_not_set_port_in_params(self):
         """Тестирование функции get_params с не корректно заданным портом"""
         self.assertRaises(AttributeError, get_params)
 
-    @patch.object(sys, 'argv', ['client.py', '-a', '127001'])
+    @patch.object(sys, 'argv', ['client_old.py', '-a', '127001'])
     def test_get_params_with_incorrect_address_in_params(self):
         """Тестирование функции get_params с не корректно заданным адресом"""
         self.assertRaises(SystemExit, get_params)

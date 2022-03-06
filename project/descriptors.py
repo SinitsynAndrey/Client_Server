@@ -4,13 +4,14 @@ import logging
 import sys
 import logs.config_client_log
 import logs.config_server_log
+from logs.decos import log
 
 if 'server' in sys.argv[0]:
     logger = logging.getLogger('server')
 else:
     logger = logging.getLogger('client')
 
-
+@log
 class ServerPort:
     """Port validation descriptor."""
     def __set__(self, instance, value):
