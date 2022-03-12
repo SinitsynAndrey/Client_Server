@@ -89,15 +89,15 @@ class Server(threading.Thread, metaclass=ServerValidator):
 
     def preparation_send_message(self, client, message):
         """Обработка и отправка сообщения от клиента к клиенту."""
-
         if FROM in message and TO in message and MESSAGE_TEXT in message:
             logger.debug(f'Получено сообщение от пользователя{message[FROM]}: {message[MESSAGE_TEXT]}')
             if message[TO] in self.user_names:
                 send_message(self.user_names[message[TO]], message)
+                send_message(client, {RESPONSE: 200})
                 self.db.modification_action_history(message[FROM], message[TO])
             else:
                 send_message(client,
-                             {RESPONSE: 406,
+                             {RESPONSE: 400,
                               ERROR: f'Невозможно доставить сообщение пользователь {message[TO]} не в сети'})
         else:
             logger.error(f'Получена некорректная информация о имени пользователя. Соединение не установлено')
@@ -107,17 +107,17 @@ class Server(threading.Thread, metaclass=ServerValidator):
     def preparation_exit_message(self, client, message):
         """Обработка сообщения о выходе"""
         global new_connection
-        if FROM in message:
+        if ACCOUNT_NAME in message:
             logger.debug(f'Получено exit сообщение от {client.getpeername()}')
             send_message(client, {ACTION: EXIT})
-            self.db.client_logout(message[FROM])
+            self.db.client_logout(message[ACCOUNT_NAME])
             self.clients.remove(client)
             client.close()
-            del self.user_names[message[FROM]]
+            del self.user_names[message[ACCOUNT_NAME]]
             with conflag_lock:
                 new_connection = True
         else:
-            logger.error(f'Получена некорректная информация о имени пользователя. Соединение не установлено')
+            logger.error(f'Получена некорректная информация о имени пользователя.')
             send_message(client, {RESPONSE: 400,
                                   ERROR: 'Получено некорректное сообщение'})
 
@@ -138,13 +138,9 @@ class Server(threading.Thread, metaclass=ServerValidator):
     def preparation_del_contact(self, client, message):
         """Обработка сообщения об удалении пользователя из списко контактов."""
         if USER in message and CONTACT in message:
-            if message[CONTACT] in self.db.contacts_list(message[USER]):
-                self.db.delete_contact(message[USER], message[CONTACT])
-                send_message(client, {RESPONSE: 200,
-                                      ALERT: f'Пользователь {message[CONTACT]} удален из списка контактов'})
-            else:
-                send_message(client, {RESPONSE: 206,
-                                      ALERT: f'Пользователь {message[CONTACT]} отсутствует в списке контактов'})
+            self.db.delete_contact(message[USER], message[CONTACT])
+            send_message(client, {RESPONSE: 200,
+                                  ALERT: f'Пользователь {message[CONTACT]} удален из списка контактов'})
 
     def preparation_user_request(self, client, message):
         if ACCOUNT_NAME in message:
@@ -186,6 +182,7 @@ class Server(threading.Thread, metaclass=ServerValidator):
 
     def run(self):
         """Основной цикл работы сервера."""
+        global new_connection
         self.create_socket()
         while True:
             try:
@@ -208,13 +205,16 @@ class Server(threading.Thread, metaclass=ServerValidator):
                         try:
                             self.process_client_message(get_message(client_with_message), client_with_message)
                         except:
-                            logger.error(f'Клиент {client_with_message.getpeername()} '
+                            logger.error(f'Клиент уккп{client_with_message.getpeername()} '
                                          f'отключился от сервера')
                             for el in self.user_names:
                                 if self.user_names[el] == client_with_message:
+                                    self.db.client_logout(el)
                                     del self.user_names[el]
                                     break
                             self.clients.remove(client_with_message)
+                            with conflag_lock:
+                                new_connection = True
 
 
 def create_gui(config, db):
@@ -268,7 +268,6 @@ def create_gui(config, db):
             config['SETTINGS']['Listen_Address'] = config_window.ip.text()
             if 1023 < port < 65536:
                 config['SETTINGS']['Default_port'] = str(port)
-                print(port)
                 with open('server.ini', 'w') as conf:
                     config.write(conf)
                     message.information(

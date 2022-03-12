@@ -26,14 +26,14 @@ class ClientDB:
     class HistoryMessages(Base):
         __tablename__ = 'history_messages'
         id = Column(Integer, primary_key=True)
-        from_user = Column(String)
-        to_user = Column(String)
+        contact = Column(String)
+        status = Column(String)
         message = Column(String)
         message_time = Column(DateTime)
 
-        def __init__(self, from_user, to_user, message):
-            self.from_user = from_user
-            self.to_user = to_user
+        def __init__(self, contact, status, message):
+            self.contact = contact
+            self.status = status
             self.message = message
             self.message_time = datetime.now()
 
@@ -59,14 +59,8 @@ class ClientDB:
             self.session.query(self.Contacts).filter_by(name=name).delete()
             self.session.commit()
 
-    def list_contacts(self):
-        contacts = self.session.query(self.Contacts.name).all()
-        for i in range(len(contacts)):
-            contacts[i] = contacts[i][0]
-        return ' '.join(contacts)
-
-    def save_message(self, from_user, to_user, message):
-        message_row = self.HistoryMessages(from_user, to_user, message)
+    def save_message(self, contact, status, message):
+        message_row = self.HistoryMessages(contact, status, message)
         self.session.add(message_row)
         self.session.commit()
 
@@ -95,18 +89,14 @@ class ClientDB:
         else:
             return False
 
-    def get_history(self, from_user=None, to_user=None):
-        query = self.session.query(self.HistoryMessages)
-        if from_user:
-            query = query.filter_by(from_user=from_user)
-        if to_user:
-            query = query.filter_by(to_user=to_user)
-        return [(history_row.from_user, history_row.to_user, history_row.message, history_row.message_time)
-                for history_row in query.all()]
+    def get_history(self, contact):
+        query = self.session.query(self.HistoryMessages).filter_by(contact=contact).all()
+        return [(history_row.contact, history_row.status, history_row.message, history_row.message_time)
+                for history_row in query]
 
 
 if __name__ == '__main__':
     db = ClientDB('i')
     db.add_contact('mike')
-    db.list_contacts()
-    db.add_users()
+    db.get_contacts()
+

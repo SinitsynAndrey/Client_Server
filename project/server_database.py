@@ -119,9 +119,7 @@ class ServerDB:
 
     def clients_list(self):
         clients = self.session.query(self.Clients.login, self.Clients.last_connect).all()
-        for i in range(len(clients)):
-            clients[i] = clients[i][0]
-        return clients
+        return [client[0] for client in clients]
 
     def active_clients_list(self):
         query = self.session.query(
@@ -153,22 +151,22 @@ class ServerDB:
             self.session.commit()
 
     def delete_contact(self, client_name, contact_name):
-        client = self.session.query(self.Clients).filter_by(login=client_name).first()
-        contact = self.session.query(self.Clients).filter_by(login=contact_name).first()
+        client = self.session.query(self.Clients).filter_by(login=client_name).one()
+        contact = self.session.query(self.Clients).filter_by(login=contact_name).one()
 
-        if self.session.query(self.Contacts).filter_by(client=client.id,
-                                                       contact=contact.id).first():
-            self.session.query(self.Contacts).filter_by(client=client.id,
-                                                        contact=contact.id).first().delete()
-            self.session.commit()
+        if not contact:
+            return
+
+        self.session.query(self.Contacts).filter_by(client=client.id, contact=contact.id).delete()
+        self.session.commit()
 
     def contacts_list(self, name):
         client = self.session.query(self.Clients).filter_by(login=name).first()
         contacts = self.session.query(self.Clients.login).\
-            join(self.Contacts, self.Contacts.contact == self.Clients.id).filter_by(client=client.id).all()
-        for i in range(len(contacts)):
-            contacts[i] = contacts[i][0]
-        return contacts
+            join(self.Contacts, self.Contacts.contact == self.Clients.id).\
+            filter_by(client=client.id).all()
+
+        return [contact[0] for contact in contacts]
 
     def modification_action_history(self, sender, receiver):
         sender = self.session.query(self.Clients).filter_by(login=sender).one()
@@ -186,7 +184,7 @@ class ServerDB:
             self.HistoryAction.sent,
             self.HistoryAction.received
         ).join(self.Clients)
-        # Возвращаем список кортежей
+
         return query.all()
 
 
