@@ -9,6 +9,7 @@ if 'server' in sys.argv[0]:
 else:
     logger = logging.getLogger('client')
 
+
 @log
 def get_message(client):
 

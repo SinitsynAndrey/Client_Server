@@ -37,8 +37,8 @@ class ClientDB:
             self.message = message
             self.message_time = datetime.now()
 
-    def __init__(self, name):
-        self.engine = create_engine(f'sqlite:///client_{name}_base.db3', echo=False, pool_recycle=7200,
+    def __init__(self, path):
+        self.engine = create_engine(f'sqlite:///{path}.db3', echo=False, pool_recycle=7200,
                                     connect_args={'check_same_thread': False})
 
         self.Base.metadata.create_all(self.engine)

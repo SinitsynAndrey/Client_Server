@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
@@ -12,10 +12,14 @@ class ServerDB:
         id = Column(Integer, primary_key=True)
         login = Column(String, unique=True)
         last_connect = Column(DateTime)
+        pub_key = Column(Text)
+        password_hash = Column(String)
 
-        def __init__(self, login):
+        def __init__(self, login, password_hash):
             self.login = login
             self.last_connect = datetime.now()
+            self.password_hash = password_hash
+            self.pub_key = None
 
     class ActiveClients(Base):
         __tablename__ = 'active_clients'
@@ -80,19 +84,47 @@ class ServerDB:
         self.session.query(self.ActiveClients).delete()
         self.session.commit()
 
-    def client_login(self, username, ip_address, port):
+    def add_user(self, name, passwd_hash):
+        user_row = self.Clients(name, passwd_hash)
+        self.session.add(user_row)
+        self.session.commit()
+        history_row = self.HistoryAction(user_row.id)
+        self.session.add(history_row)
+        self.session.commit()
+
+    def remove_user(self, name):
+        client = self.session.query(self.Clients).filter_by(login=name).first()
+        self.session.query(self.ActiveClients).filter_by(client=client.id).delete()
+        self.session.query(self.HistoryAction).filter_by(client=client.id).delete()
+        self.session.query(self.HistoryClients).filter_by(client=client.id).delete()
+        self.session.query(self.Contacts).filter_by(contact=client.id).delete()
+        self.session.query(self.Clients).filter_by(login=name).delete()
+        self.session.commit()
+
+    def get_hash(self, name):
+        client = self.session.query(self.Clients).filter_by(login=name).first()
+        return client.password_hash
+
+    def get_pubkey(self, name):
+        user = self.session.query(self.Clients).filter_by(login=name).first()
+        return user.pub_key
+
+    def check_user(self, name):
+        if self.session.query(self.Clients).filter_by(login=name).count():
+            return True
+        else:
+            return False
+
+    def client_login(self, username, ip_address, port, key):
         new_connect = self.session.query(self.Clients).filter_by(login=username)
 
         if new_connect.count():
             connected_client = new_connect.first()
             connected_client.last_connect = datetime.now()
+            if connected_client.pub_key != key:
+                connected_client.pub_key = key
         else:
-            connected_client = self.Clients(username)
-            self.session.add(connected_client)
-            self.session.commit()
-
-            history_client = self.HistoryAction(connected_client.id)
-            self.session.add(history_client)
+            raise ValueError('Пользователь не зарегистрирован.')
 
         active_client = self.ActiveClients(connected_client.id, ip_address, port)
         self.session.add(active_client)
@@ -190,9 +222,13 @@ class ServerDB:
 
 if __name__ == '__main__':
     db = ServerDB('server_base.db3')
-    db.client_login('client_1', '127.0.0.1', 7777)
-    db.client_login('client_2', '127.0.0.1', 7777)
-    db.client_login('client_3', '127.0.0.1', 7777)
+    db.add_user('client_1', "123")
+    db.add_user('client_2', "123")
+    db.add_user('client_3', "123")
+    db.check_user('client_1')
+    db.client_login('client_1', '127.0.0.1', 7777, "123")
+    db.client_login('client_2', '127.0.0.1', 7777, "123")
+    db.client_login('client_3', '127.0.0.1', 7777, "123")
     print(db.clients_list())
     db.client_logout('client_2')
     print(db.active_clients_list())
