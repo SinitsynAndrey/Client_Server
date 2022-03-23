@@ -11,7 +11,7 @@ if 'server' in sys.argv[0]:
 else:
     logger = logging.getLogger('client')
 
-@log
+
 class ServerPort:
     """Port validation descriptor."""
     def __set__(self, instance, value):

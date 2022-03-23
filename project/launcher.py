@@ -1,7 +1,8 @@
-"""Запускает сервер и  4 клиента (2 на чтение и 2 на отправку)"""
+"""Запускает сервер и  2 клиента"""
 from subprocess import Popen, CREATE_NEW_CONSOLE
 
-Popen('python server.py')
+if __name__ == "__main__":
+    Popen('python server.py')
 
-for i in range(2):
-    Popen(f'python client.py', creationflags=CREATE_NEW_CONSOLE)
+    for i in range(2):
+        Popen(f'python client_run.py -n test_{i} -p 123', creationflags=CREATE_NEW_CONSOLE)

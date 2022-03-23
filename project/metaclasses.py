@@ -2,6 +2,10 @@ import dis
 
 
 class ServerValidator(type):
+    """
+    Check the server class for the absence of the client method connect
+    and for the correct initialization of the socket.
+    """
     def __init__(cls, clsname, bases, clsdict):
         methods = []
         attrs = []
@@ -26,6 +30,10 @@ class ServerValidator(type):
 
 
 class ClientValidator(type):
+    """
+    Check the client class for the absence of server methods and
+    for the presence of the methods 'get_message' and 'send_message'.
+    """
     def __init__(cls, clsname, bases, clsdict):
         methods = []
         for func in clsdict:

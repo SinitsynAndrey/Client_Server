@@ -12,7 +12,7 @@ else:
 
 @log
 def get_message(client):
-
+    """Get and decode message"""
     encode_response = client.recv(MAX_PACKAGES_LENGTH)
     if isinstance(encode_response, bytes):
         decode_response = encode_response.decode(ENCODING)
@@ -27,7 +27,7 @@ def get_message(client):
 
 @log
 def send_message(client, msg):
-    """Отправка сообщения."""
+    """Encode and send message."""
     try:
         json_response = json.dumps(msg)
     except json.JSONDecodeError:

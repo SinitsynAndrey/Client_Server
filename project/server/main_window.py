@@ -85,10 +85,12 @@ class MainWindow(QMainWindow):
         self.active_clients_table.resizeRowsToContents()
 
     def show_statistics(self):
+        global stat_window
         stat_window = StatWindow(self.database)
         stat_window.show()
 
     def server_config(self):
+        global config_window
         config_window = ConfigWindow(self.config)
 
     def reg_user(self):

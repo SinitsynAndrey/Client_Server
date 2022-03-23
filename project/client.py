@@ -18,6 +18,7 @@ logger = logging.getLogger('client')
 
 
 class Client:
+    """Client application initialization."""
     def __init__(self):
         self.server_address = None
         self.server_port = None
@@ -28,7 +29,7 @@ class Client:
 
         self.client_app = QApplication(sys.argv)
 
-        if not (self.client_name or self.client_password):
+        if not (self.client_name and self.client_password):
             start_dialog = UserNameDialog()
             self.client_app.exec_()
             if start_dialog.ok_pressed:
@@ -63,7 +64,7 @@ class Client:
                                              keys)
         except ServerError as error:
             message = QMessageBox()
-            message.critical(start_dialog, 'Ошибка сервера', error.text)
+            message.critical(None, 'Ошибка сервера', error.text)
             exit(1)
         self.transport.setDaemon(True)
         self.transport.start()
@@ -80,6 +81,7 @@ class Client:
 
     @log
     def arg_parser(self):
+        """Parsing command line arguments."""
         parser = argparse.ArgumentParser()
         parser.add_argument('addr', default=DEFAULT_SERVER_ADDRESS, nargs='?')
         parser.add_argument('port', default=DEFAULT_PORT, type=int, nargs='?')

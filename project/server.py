@@ -17,6 +17,7 @@ logger = logging.getLogger('server')
 
 
 def get_params():
+    """Get parameters from ini file and from command line."""
     config = configparser.ConfigParser()
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -39,6 +40,7 @@ def get_params():
 
 
 def run_server():
+    """Start server application."""
     config = get_params()
 
     db_path = os.path.join(config['SETTINGS']['Database_path'],
